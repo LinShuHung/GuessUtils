@@ -15,7 +15,8 @@ class Utils {
     fun saveResultString(contex: Context, fileName: String, saveKey: String, saveData:String){
         Log.d(tag, "Save data:$saveData")
         contex.getSharedPreferences(fileName, AppCompatActivity.MODE_PRIVATE)
-            .edit().putString(saveKey,saveData)
+            .edit()
+            .putString(saveKey,saveData)
             .apply()
     }
 
