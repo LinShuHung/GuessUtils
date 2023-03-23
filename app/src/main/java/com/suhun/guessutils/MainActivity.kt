@@ -1,5 +1,6 @@
 package com.suhun.guessutils
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
@@ -53,7 +54,13 @@ class MainActivity : AppCompatActivity() {
             AlertDialog.Builder(this)
                 .setTitle("Guess Result")
                 .setMessage(message).setPositiveButton("Ok", {dialog, view->
-                    binding.contentLayout.userInputText.text = null
+                    if(bingo){
+                        val intent:Intent = Intent(this, RecordActivity::class.java)
+                        intent.putExtra("COUNT", secretNumber.guessCounter)
+                        startActivity(intent)
+                    }else{
+                        binding.contentLayout.userInputText.text = null
+                    }
                 })
                 .show()
         }
