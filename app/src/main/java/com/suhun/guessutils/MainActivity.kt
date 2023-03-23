@@ -11,6 +11,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.suhun.guessutils.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -30,9 +32,30 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         binding.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAnchorView(R.id.fab)
-                .setAction("Action", null).show()
+            AlertDialog.Builder(this)
+                .setTitle("Reset Game")
+                .setMessage("Are you sure?").setPositiveButton("Ok", { dialog, view ->
+                    secretNumber.resetAll()
+                    binding.contentLayout.userInputText.text = null
+                    binding.contentLayout.guessCounterView.text = "0"
+                    Toast.makeText(this, "Suecess", Toast.LENGTH_LONG)
+                })
+                .setNeutralButton("Cancel", null)
+                .show()
+        }
+
+        binding.contentLayout.guessButton.setOnClickListener { view ->
+            val userInput: Int = binding.contentLayout.userInputText.text.toString().toInt()
+            val message: String = secretNumber.verifyResult(resources, userInput)
+            val bingo = if (secretNumber.verify(userInput) == 0) true else false
+
+            binding.contentLayout.guessCounterView.text = "${secretNumber.guessCounter.toString()} times"
+            AlertDialog.Builder(this)
+                .setTitle("Guess Result")
+                .setMessage(message).setPositiveButton("Ok", {dialog, view->
+                    binding.contentLayout.userInputText.text = null
+                })
+                .show()
         }
 
     }
